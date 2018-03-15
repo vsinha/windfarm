@@ -4,6 +4,8 @@
  Author:	viraj
 */
 
+#ifndef OTA_PROGRAMMER
+
 #include "Identification.h"
 #include "StatusLed.h"
 #include "sync_protocol.h"
@@ -13,11 +15,6 @@
 #include <Arduino.h>
 
 #define SERIAL_BAUD 115200
-
-#define IS_LISTENING 1
-
-#define BUFFER_LENGTH 64
-uint8_t buffer_length = BUFFER_LENGTH;
 
 StatusLed statusLed;
 Identification id;
@@ -33,7 +30,7 @@ void setup() {
 	pinMode(PWM_PIN, OUTPUT);
 
 	// set the id in EEPROM
-	//id.setId(2);
+	id.setId(6);
 
 	// load up the ID we have stored
 	id.getId();
@@ -47,6 +44,22 @@ unsigned long elapsed;
 
 uint16_t frameCount = 0; // this will roll over
 
+// Synchronizes frameCount from master to slaves
+void transmitOrReceiveSyncPacket() {
+    if (id.myId == 1) {
+        // we are the broadcaster!
+        if (frameCount % 256 == 0) {
+            radio.sendFrameCount(id.myId, frameCount);
+        }
+    }
+    else {
+        if (radio.tryReceive()) {
+            int correctionFactor = 3; // this is a guess
+            frameCount = radio.latestReceived.frameCount + correctionFactor;
+        }
+    }
+}
+
 void loop() {
 	startTime = micros();
 	frameCount += 1;
@@ -54,19 +67,7 @@ void loop() {
 
 	yielding_led_update(frameCount);
 
-	if (id.myId == 1) {
-		// we are the broadcaster!
-		if (frameCount % 256 == 0) {
-			radio.sendFrameCount(id.myId, frameCount);
-		}
-	}
-	else {
-		if (radio.tryReceive()) {
-			int correctionFactor = 3; // this is a guess
-			frameCount = radio.latestReceived.frameCount + correctionFactor;
-		}
-	}
-
+    transmitOrReceiveSyncPacket();
 
 	elapsed = micros() - startTime;
 	if (elapsed < frameLength) {
@@ -77,3 +78,5 @@ void loop() {
 		Serial.printf("oot! %ld\n", elapsed);
 	}
 }
+
+#endif // !OTA_PROGRAMMER

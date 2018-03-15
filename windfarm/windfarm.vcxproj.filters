@@ -13,9 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="OTA">
+      <UniqueIdentifier>{4d34a494-4c68-4857-8798-bc03a9e740a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="windfarm.ino" />
+    <None Include="programmer.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lights.cpp">
@@ -28,6 +32,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StatusLed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Identification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,6 +55,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StatusLed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Identification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,6 +14,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega328p__
 #define __AVR_ATmega328P__
+#define OTA_PROGRAMMER
 #define F_CPU 16000000L
 #define ARDUINO 10802
 #define ARDUINO_AVR_ATmega328
@@ -77,5 +78,6 @@ typedef void *__builtin_va_list;
 #define pgm_read_ptr(address_short)   short()
 
 #include "windfarm.ino"
+#include "programmer.ino"
 #endif
 #endif
