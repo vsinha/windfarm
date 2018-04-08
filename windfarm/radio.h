@@ -15,14 +15,15 @@
 
 enum PayloadMessageType {
 	EMPTY,
-	PULSE_NOW,
+    LEADER,
+    SYNC
 };
 
 typedef struct {
 	uint8_t nodeId; // who's sending
-	//uint8_t leaderId; // who we think is leader
+	uint8_t leaderId; // who we think is leader
 	uint16_t frameCount;
-	//PayloadMessageType messageType;
+	PayloadMessageType messageType;
 	//unsigned long uptime;
 } Payload;
 
@@ -42,8 +43,8 @@ public:
 	//void send(uint8_t * data);
 
 	void send(Payload* data);
-	void sendFrameCount(uint8_t myId, uint16_t fc);
-
+	void sendFrameCount(uint8_t myId, uint8_t leaderId, uint16_t fc);
+    void sendLeader(uint8_t myId, uint8_t leaderId);
 };
 
 #endif

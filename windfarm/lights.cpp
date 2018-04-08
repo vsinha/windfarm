@@ -49,7 +49,7 @@ void set_led_brightness(uint8_t val) {
 }
 
 void yielding_led_update(unsigned long frameCount) {
-	float offset = frameCount / 256.0;
+	float offset = frameCount / 2048.0;
 	int value = 127.5 + 127.5 * sin(offset * 2.0 * PI);
 	set_led_brightness(value);
 	yield();
