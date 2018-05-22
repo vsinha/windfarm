@@ -28,7 +28,10 @@ void setup() {
     randomSeed(analogRead(0));
 
 	pinMode(BUILTIN_LED_PIN, OUTPUT);
-	pinMode(PWM_PIN, OUTPUT);
+	pinMode(EXTERNAL_ADDRESSABLE_LED_PIN, OUTPUT);
+	pinMode(EXTERNAL_SINGLE_LED_PIN, OUTPUT);
+
+	lights::setup();
 
 	// set the id in EEPROM
 	//id.setId(3);
@@ -44,23 +47,6 @@ unsigned long startTime;
 unsigned long elapsed;
 
 uint16_t frameCount = 0; // this will roll over
-
-// Synchronizes frameCount from master to slaves
-//void transmitOrReceiveSyncPacket() {
-//    //if (id.myId == 1) {
-//    if (currentLeaderId == id.myId) {
-//        // we are the broadcaster!
-//        if (frameCount % 256 == 0) {
-//            radio.sendFrameCount(id.myId, frameCount);
-//        }
-//    }
-//    else {
-//        if (radio.tryReceive()) {
-//            int correctionFactor = 3; // this is a guess
-//            frameCount = radio.latestReceived.frameCount + correctionFactor;
-//        }
-//    }
-//}
 
 int numTicksSinceLastMaster = 0;
 int ticksSinceLastMasterLimit = 1000;
@@ -93,18 +79,8 @@ void handleSyncPacket() {
 
 void receivePacket() {
     if (radio.tryReceive()) {
-        //switch (radio.latestReceived.messageType) {
-        //case LEADER:
-        Serial.printf("%d: received leader packet\n", id.myId);
         handleLeaderPacket();
         handleSyncPacket();
-            //return;
-        //case SYNC:
-        //    Serial.printf("%d: received sync packet\n", id.myId);
-        //    return handleSyncPacket();
-        //default:
-            //return;
-        //}
     }
 }
 
@@ -118,18 +94,16 @@ void loop() {
 	
     statusLed.toggle();
 
-	yielding_led_update(frameCount);
-
-    //transmitOrReceiveSyncPacket();
+	lights::yielding_led_update(frameCount);
 
     receivePacket();
 
     if (numTicksSinceLastMaster > ticksSinceLastMasterLimit) {
         Serial.printf("%d: Electing ourself leader\n", id.myId);
-        // we haven't heard from anyone, so declare ourselves master
-        myLeader = id.myId;
 
+        // we haven't heard from anyone, so declare ourselves master
         // and tell everyone
+        myLeader = id.myId;
         radio.sendLeader(id.myId, myLeader);
 
         numTicksSinceLastMaster = 0;
@@ -147,6 +121,7 @@ void loop() {
         numTicksSinceLastMaster += 1;
     }
 
+	// delay
 	//elapsed = micros() - startTime;
 	//if (elapsed < frameLength) {
 	//	delayMicroseconds(frameLength - elapsed);

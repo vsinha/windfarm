@@ -9,6 +9,8 @@
 #include "WProgram.h"
 #endif
 
+#include <FastLED.h>
+
 #include "sync_protocol.h"
 #include "pins.h"
 
@@ -17,11 +19,16 @@
 #define LED_DELTA 5
 #define BRIGHTNESS_CHANGE_RATE 50
 
-void led_update();
-void set_led_brightness(uint8_t val);
+#define NUM_LEDS 56
+#define LED_TYPE    WS2812
+#define COLOR_ORDER GRB
 
-void yielding_led_update(unsigned long frameCount);
-
+namespace lights {
+	void setup();
+	void set_led_brightness(uint8_t val);
+	void update_addressable_leds(int numLeds, uint8_t val);
+	void yielding_led_update(unsigned long frameCount);
+}
 
 /*
 Blink cycle:
@@ -38,7 +45,5 @@ sin wave height of LED brightness (128), period = desired freq
 calculate sin() constantly and set brighness to zero
 if the sin value comes out negative
 */
-
-//int blink_cycle_time = 1000 * 10;
 
 #endif

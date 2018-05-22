@@ -14,15 +14,7 @@ void Radio::initialize() {
 
 	// Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on
 	radio.setFrequency(915);
-
-	//len = sizeof(Payload);
-
-	//Serial.printf("payload len: %d\n", len);
 }
-
-//bool Radio::recv(char* buf, uint8_t* len) {
-//	return radio.recv((uint8_t*)buf, len);
-//}
 
 // if the radio is available fill the buffer with whatever message we've got
 // return status indicates whether we took any action
@@ -61,15 +53,3 @@ void Radio::send(Payload* p) {
 	Serial.printf("send myId=%d, leader=%d, type=%d, fc=%u\n", p->nodeId, p->leaderId, p->messageType, p->frameCount);
 	radio.send((uint8_t*)p, len);
 }
-
-//void Radio::send(char* data) {
-//	radio.send((uint8_t*)data, sizeof(data));
-//}
-
-//void Radio::send(Payload* data) {
-//	send((uint8_t*)data);
-//}
-//
-//void Radio::send(uint8_t* data) {
-//	radio.send(data, sizeof(data));
-//}

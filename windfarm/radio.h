@@ -34,13 +34,9 @@ public:
 
 	// Stores the latest packet
 	Payload latestReceived;
-	//uint8_t len;
 
 	void initialize();
-	//bool recv(Payload& buf, uint8_t* len);
 	bool tryReceive();
-	//void send(char * data);
-	//void send(uint8_t * data);
 
 	void send(Payload* data);
 	void sendFrameCount(uint8_t myId, uint8_t leaderId, uint16_t fc);

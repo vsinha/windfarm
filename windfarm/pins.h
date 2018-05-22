@@ -10,7 +10,8 @@
 #endif
 
 #define BUILTIN_LED_PIN 9
-#define PWM_PIN 5
+#define EXTERNAL_SINGLE_LED_PIN 5
+#define EXTERNAL_ADDRESSABLE_LED_PIN 6
 
 #endif
 
